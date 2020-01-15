@@ -59,6 +59,9 @@ class OBD(object):
         self.__last_header = ECU_HEADER.ENGINE  # for comparing with the previously used header
         self.__frame_counts = {}  # keeps track of the number of return frames for each command
 
+        # custom vars
+        self.___voltage = ''
+
         logger.info("======================= python-OBD (v%s) =======================" % __version__)
         self.__connect(portstr, baudrate, protocol,
                        check_voltage, start_low_power)  # initialize by connecting and loading sensors
@@ -98,6 +101,7 @@ class OBD(object):
         if self.interface.status() == OBDStatus.NOT_CONNECTED:
             # the ELM327 class will report its own errors
             self.close()
+        else: self.___voltage = self.interface.voltage
 
     def __load_commands(self):
         """
@@ -313,3 +317,8 @@ class OBD(object):
             cmd_string = b""
 
         return cmd_string
+
+    @property
+    def voltage(self):
+        """ get the voltage gathered from interface on init """
+        return self.___voltage

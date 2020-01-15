@@ -1,6 +1,9 @@
 python-OBD
 ==========
 
+**Forked version**
+- Added voltage gathering even if car is off
+
 A python module for handling realtime sensor data from OBD-II vehicle
 ports. Works with ELM327 OBD-II adapters, and is fit for the Raspberry
 Pi.

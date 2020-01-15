@@ -120,6 +120,9 @@ class ELM327:
         self.__low_power = False
         self.timeout = timeout
 
+        # custom
+        self.___voltage = ''
+
         # ------------- open port -------------
         try:
             self.__port = serial.serial_for_url(portname,
@@ -177,6 +180,8 @@ class ELM327:
         # -------------------------- AT RV (read volt) ------------------------
         if check_voltage:
             r = self.__send(b"AT RV")
+            # save voltage to instance (useful even if car turned off)
+            self.___voltage = r
             if not r or len(r) != 1 or r[0] == '':
                 self.__error("No answer from 'AT RV'")
                 return
@@ -565,3 +570,8 @@ class ELM327:
         lines = [s.strip() for s in re.split("[\r\n]", string) if bool(s)]
 
         return lines
+
+    @property
+    def voltage(self):
+        """ return the voltage saved on init """
+        return self.___voltage
